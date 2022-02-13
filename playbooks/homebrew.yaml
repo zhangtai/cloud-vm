@@ -1,0 +1,34 @@
+---
+- name: Download installers from internet
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: /tmp/{{ item.file_name }}
+    mode: 0755
+  loop:
+    - url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+      file_name: install_homebrew.sh
+
+- name: Install Homebrew
+  become: yes
+  become_user: zhangtai
+  ansible.builtin.shell: "/bin/bash /tmp/install_homebrew.sh"
+  environment:
+    CI: yes
+
+- name: Install tools from homebrew
+  become: yes
+  become_user: zhangtai
+  ansible.builtin.shell: |
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    brew install curl \
+      git \
+      vim \
+      neovim \
+      navi \
+      fzf \
+      ripgrep \
+      tmux \
+      packer \
+      python@3.10 \
+      rustup \
+      jq

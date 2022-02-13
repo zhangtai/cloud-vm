@@ -1,0 +1,23 @@
+---
+- name: Build homebrew based server
+  hosts: default
+  become: true
+
+  tasks:
+    - name: install apt software
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - build-essential
+        - acl
+        - zsh
+
+    - name: Create user
+      ansible.builtin.include_tasks:
+        file: create-user.yaml
+
+    - name: Install Homebrew
+      ansible.builtin.include_tasks:
+        file: homebrew.yaml
