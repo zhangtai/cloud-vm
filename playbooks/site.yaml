@@ -5,7 +5,7 @@
 
   tasks:
     - name: install apt software
-      apt:
+      ansible.builtin.apt:
         name: "{{ item }}"
         state: present
         update_cache: yes
@@ -13,6 +13,10 @@
         - build-essential
         - acl
         - zsh
+
+    - name: System config
+      ansible.builtin.include_tasks:
+        file: sysconfig.yaml
 
     - name: Create user
       ansible.builtin.include_tasks:
